@@ -265,48 +265,52 @@ const PostJob = () => {
           </div>
 
           {/* Submit Button */}
-          <div className="flex justify-center">
-            <button 
+                    {/* Submit Button */}
+          <div className="mt-10 text-center">
+            <button
               onClick={handlePost}
-              disabled={loading || !isFormValid}
-              className={`px-8 py-4 rounded-2xl font-semibold text-white transition-all duration-300 transform hover:scale-105 focus:outline-none focus:scale-105 flex items-center gap-3 ${
-                loading || !isFormValid
-                  ? 'bg-gray-600 cursor-not-allowed scale-95'
-                  : 'bg-gradient-to-r from-emerald-600 via-blue-600 to-purple-600 hover:from-emerald-500 hover:via-blue-500 hover:to-purple-500 shadow-2xl hover:shadow-emerald-500/50 active:scale-95'
+              disabled={!isFormValid || loading}
+              className={`inline-flex items-center gap-2 px-8 py-4 rounded-full text-white text-lg font-semibold transition-all duration-300 ${
+                !isFormValid || loading
+                  ? 'bg-emerald-700/50 cursor-not-allowed'
+                  : 'bg-emerald-500 hover:bg-emerald-600'
               }`}
             >
               {loading ? (
                 <>
-                  <div className="w-5 h-5 border-2 border-white/30 border-t-white rounded-full animate-spin"></div>
-                  Posting Job...
+                  <svg
+                    className="animate-spin h-5 w-5 text-white"
+                    xmlns="http://www.w3.org/2000/svg"
+                    fill="none"
+                    viewBox="0 0 24 24"
+                  >
+                    <circle
+                      className="opacity-25"
+                      cx="12"
+                      cy="12"
+                      r="10"
+                      stroke="currentColor"
+                      strokeWidth="4"
+                    ></circle>
+                    <path
+                      className="opacity-75"
+                      fill="currentColor"
+                      d="M4 12a8 8 0 018-8v8H4z"
+                    ></path>
+                  </svg>
+                  Posting...
                 </>
               ) : (
                 <>
                   <Send className="w-5 h-5" />
                   Post Job
-                  <Sparkles className="w-5 h-5" />
                 </>
               )}
             </button>
-          </div>
-
-          {/* Tips Section */}
-          <div className="mt-8 p-6 bg-white/5 border border-white/10 rounded-2xl">
-            <h3 className="text-lg font-semibold text-emerald-400 mb-3 flex items-center gap-2">
-              <Sparkles className="w-5 h-5" />
-              Pro Tips for Better Job Posts
-            </h3>
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-4 text-sm text-gray-300">
-              <div>• Be specific about role requirements</div>
-              <div>• Include salary range if possible</div>
-              <div>• Mention company culture and benefits</div>
-              <div>• Use clear, engaging language</div>
-            </div>
           </div>
         </div>
       </div>
     </div>
   );
 };
-
 export default PostJob;
