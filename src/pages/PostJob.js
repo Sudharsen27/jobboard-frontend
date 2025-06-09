@@ -7,6 +7,8 @@ const PostJob = () => {
   const [focusedField, setFocusedField] = useState('');
   const [mousePosition, setMousePosition] = useState({ x: 0, y: 0 });
   const [showSuccess, setShowSuccess] = useState(false);
+  const [pdfFile, setPdfFile] = useState(null);
+
 
   // Mouse tracking for dynamic background
   useEffect(() => {
@@ -17,45 +19,52 @@ const PostJob = () => {
     return () => window.removeEventListener('mousemove', handleMouseMove);
   }, []);
 
-  const handlePost = async () => {
-    const token = localStorage.getItem('token');
-    if (!token) {
-      alert('Please login as employer first');
-      return;
+ const handlePost = async () => {
+  const token = localStorage.getItem('token');
+  if (!token) {
+    alert('Please login as employer first');
+    return;
+  }
+
+  if (!job.title || !job.company || !job.location || !job.description) {
+    alert('Please fill in all fields');
+    return;
+  }
+
+  const formData = new FormData();
+  formData.append('title', job.title);
+  formData.append('company', job.company);
+  formData.append('location', job.location);
+  formData.append('description', job.description);
+  if (pdfFile) {
+    formData.append('pdf', pdfFile);
+  }
+
+  setLoading(true);
+  try {
+    const response = await fetch('http://localhost:5000/api/jobs', {
+      method: 'POST',
+      headers: {
+        Authorization: `Bearer ${token}`
+      },
+      body: formData
+    });
+
+    if (!response.ok) {
+      throw new Error('Failed to post job');
     }
 
-    if (!job.title || !job.company || !job.location || !job.description) {
-      alert('Please fill in all fields');
-      return;
-    }
+    setShowSuccess(true);
+    setTimeout(() => setShowSuccess(false), 3000);
+    setJob({ title: '', company: '', location: '', description: '' });
+    setPdfFile(null);
+  } catch (err) {
+    alert('Failed to post job');
+  } finally {
+    setLoading(false);
+  }
+};
 
-    setLoading(true);
-    try {
-      // Simulate API call since axios is not available in this environment
-      const response = await fetch('http://localhost:5000/api/jobs', {
-        method: 'POST',
-        headers: { 
-          'Content-Type': 'application/json',
-          'Authorization': `Bearer ${token}` 
-        },
-        body: JSON.stringify(job)
-      });
-      
-      if (!response.ok) {
-        throw new Error('Failed to post job');
-      }
-      
-      // Show success animation
-      setShowSuccess(true);
-      setTimeout(() => setShowSuccess(false), 3000);
-      
-      setJob({ title: '', company: '', location: '', description: '' });
-    } catch (err) {
-      alert('Failed to post job');
-    } finally {
-      setLoading(false);
-    }
-  };
 
   const backgroundStyle = {
     background: `radial-gradient(circle at ${mousePosition.x}px ${mousePosition.y}px, rgba(16, 185, 129, 0.3) 0%, rgba(59, 130, 246, 0.2) 25%, rgba(139, 92, 246, 0.1) 50%, transparent 70%)`,
@@ -208,9 +217,24 @@ const PostJob = () => {
                     }`}
                   />
                 </div>
+                
               </div>
+              
             </div>
           </div>
+          <br></br>
+          <div className="group">
+  <label className="block text-sm font-medium text-gray-200 mb-3">
+    Upload PDF (Optional)
+  </label>
+  <input
+    type="file"
+    accept="application/pdf"
+    onChange={(e) => setPdfFile(e.target.files[0])}
+    className="block w-full text-white file:mr-4 file:py-2 file:px-4 file:rounded-full file:border-0 file:text-sm file:bg-emerald-500 file:text-white hover:file:bg-emerald-600"
+  />
+</div>
+
 
           {/* Form Progress Indicator */}
           <div className="mt-8 mb-6">
