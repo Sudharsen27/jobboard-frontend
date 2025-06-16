@@ -384,6 +384,15 @@ useEffect(() => {
               >
                 <div>
                   <h2 className="text-xl font-semibold text-gray-800">{job.title}</h2>
+                  <a
+  href={`http://localhost:5000/api/jobs/${job._id}/download`}
+  target="_blank"
+  rel="noopener noreferrer"
+  className="text-sm text-blue-500 underline mt-1 inline-block"
+>
+  Download Job PDF
+</a>
+
                   <div className="flex items-center mt-1 text-gray-600">
                     <span>{job.applicants.length} applicant{job.applicants.length !== 1 ? 's' : ''}</span>
                     {job.company && (
