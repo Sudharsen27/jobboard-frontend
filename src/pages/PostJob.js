@@ -19,7 +19,52 @@ const PostJob = () => {
     return () => window.removeEventListener('mousemove', handleMouseMove);
   }, []);
 
- const handlePost = async () => {
+//  const handlePost = async () => {
+//   const token = localStorage.getItem('token');
+//   if (!token) {
+//     alert('Please login as employer first');
+//     return;
+//   }
+
+//   if (!job.title || !job.company || !job.location || !job.description) {
+//     alert('Please fill in all fields');
+//     return;
+//   }
+
+//   const formData = new FormData();
+//   formData.append('title', job.title);
+//   formData.append('company', job.company);
+//   formData.append('location', job.location);
+//   formData.append('description', job.description);
+//   if (pdfFile) {
+//     formData.append('pdf', pdfFile);
+//   }
+
+//   setLoading(true);
+//   try {
+//     const response = await fetch('http://localhost:5000/api/jobs', {
+//       method: 'POST',
+//       headers: {
+//         Authorization: `Bearer ${token}`
+//       },
+//       body: formData
+//     });
+
+//     if (!response.ok) {
+//       throw new Error('Failed to post job');
+//     }
+
+//     setShowSuccess(true);
+//     setTimeout(() => setShowSuccess(false), 3000);
+//     setJob({ title: '', company: '', location: '', description: '' });
+//     setPdfFile(null);
+//   } catch (err) {
+//     alert('Failed to post job');
+//   } finally {
+//     setLoading(false);
+//   }
+// };
+const handlePost = async () => {
   const token = localStorage.getItem('token');
   if (!token) {
     alert('Please login as employer first');
@@ -41,17 +86,31 @@ const PostJob = () => {
   }
 
   setLoading(true);
+
   try {
     const response = await fetch('http://localhost:5000/api/jobs', {
       method: 'POST',
       headers: {
-        Authorization: `Bearer ${token}`
+        Authorization: `Bearer ${token}`,
       },
-      body: formData
+      body: formData,
     });
 
+    const contentType = response.headers.get('content-type');
+
+    if (response.status === 403) {
+      const errorText = contentType?.includes('application/json')
+        ? (await response.json()).message
+        : await response.text();
+      alert(`Access Denied: ${errorText}`);
+      return;
+    }
+
     if (!response.ok) {
-      throw new Error('Failed to post job');
+      const errorText = contentType?.includes('application/json')
+        ? (await response.json()).message
+        : await response.text();
+      throw new Error(errorText || 'Failed to post job');
     }
 
     setShowSuccess(true);
@@ -59,11 +118,12 @@ const PostJob = () => {
     setJob({ title: '', company: '', location: '', description: '' });
     setPdfFile(null);
   } catch (err) {
-    alert('Failed to post job');
+    alert(`Error: ${err.message}`);
   } finally {
     setLoading(false);
   }
 };
+
 
 
   const backgroundStyle = {
