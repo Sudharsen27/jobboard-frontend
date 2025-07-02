@@ -1,0 +1,15 @@
+{
+  "files": {
+    "main.css": "/jobboard-frontend/static/css/main.911a1bae.css",
+    "main.js": "/jobboard-frontend/static/js/main.1e569e6d.js",
+    "static/js/453.388dfc0e.chunk.js": "/jobboard-frontend/static/js/453.388dfc0e.chunk.js",
+    "index.html": "/jobboard-frontend/index.html",
+    "main.911a1bae.css.map": "/jobboard-frontend/static/css/main.911a1bae.css.map",
+    "main.1e569e6d.js.map": "/jobboard-frontend/static/js/main.1e569e6d.js.map",
+    "453.388dfc0e.chunk.js.map": "/jobboard-frontend/static/js/453.388dfc0e.chunk.js.map"
+  },
+  "entrypoints": [
+    "static/css/main.911a1bae.css",
+    "static/js/main.1e569e6d.js"
+  ]
+}
