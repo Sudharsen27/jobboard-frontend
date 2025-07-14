@@ -8,6 +8,7 @@ import EmployerApplications from './pages/EmployerApplications';
 import EmployerOnlyPage from './pages/EmployerOnlyPage';
 import CandidateDashboard from './pages/CandidateDashboard';
 import EmployerDashboard from './pages/EmployerDashboard';
+import ChatRoom from './components/ChatRoom';
 
 function App() {
   const userRole = localStorage.getItem('userRole');
@@ -56,7 +57,18 @@ function App() {
                 )
               }
             />
+            <Route
+  path="/chat"
+  element={
+    <ChatRoom
+  jobId="64fab12345cdef1234567890"
+  currentUserId="64fabc00001abc0000000001"
+  targetUserId="64fabc00001abc0000000002"
+/>
+  }
+/>
           </Routes>
+          
         </main>
       </div>
     </Router>
