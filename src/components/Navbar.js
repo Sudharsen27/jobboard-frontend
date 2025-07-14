@@ -154,6 +154,15 @@ useEffect(() => {
               Jobs
             </Link>
             <Link to="/employer/applications" className={navItemClass('/employer/applications')}>View Applications</Link>
+             {/* {userName && (
+    <Link to="/chat" className={navItemClass('/chat')} onClick={() => setMenuOpen(false)}>
+      Chat Room
+    </Link>
+  )} */}
+  <Link to="/chat" className={navItemClass('/chat')} onClick={() => setMenuOpen(false)}>
+  Chat Room
+</Link>
+
             {userRole === 'employer' && (
   <Link
     to="/employer/applications"
