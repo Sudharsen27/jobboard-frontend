@@ -1,50 +1,5 @@
-// import React, { useEffect, useState } from 'react';
-// import axios from 'axios';
-
-// const JobList = () => {
-//   const [jobs, setJobs] = useState([]);
-
-//   useEffect(() => {
-//     axios.get('http://localhost:5000/api/jobs')
-//       .then((res) => setJobs(res.data))
-//       .catch(err => console.error(err));
-//   }, []);
-
-//   const handleApply = async (id) => {
-//     const token = localStorage.getItem('token');
-//     if (!token) {
-//       alert('Please login first');
-//       return;
-//     }
-//     try {
-//       await axios.post(`http://localhost:5000/api/jobs/${id}/apply`, {}, {
-//         headers: { Authorization: `Bearer ${token}` }
-//       });
-//       alert('Applied successfully!');
-//     } catch (err) {
-//       alert('Application failed');
-//     }
-//   };
-
-//   return (
-//     <div>
-//       <h2>Job Listings</h2>
-//       {jobs.map((job) => (
-//         <div key={job._id} style={{ border: '1px solid #ccc', margin: 10, padding: 10 }}>
-//           <h3>{job.title} at {job.company}</h3>
-//           <p>{job.location}</p>
-//           <p>{job.description}</p>
-//           <button onClick={() => handleApply(job._id)}>Apply</button>
-//         </div>
-//       ))}
-//     </div>
-//   );
-// };
-
-// export default JobList;
-
 import React, { useEffect, useState } from 'react';
-import { Briefcase, MapPin, Building, Clock, Send, Search, Filter, Star, Heart, CheckCircle } from 'lucide-react';
+import { Briefcase, MapPin, Building, Clock, Search, Filter, Star, Heart, CheckCircle } from 'lucide-react';
 
 const JobList = () => {
   const [jobs, setJobs] = useState([]);
@@ -108,33 +63,61 @@ const JobList = () => {
     fetchJobs();
   }, []);
 
-  const handleApply = async (id) => {
-    const token = localStorage.getItem('token');
-    if (!token) {
-      alert('Please login first');
-      return;
+  // const handleApply = async (id) => {
+  //   const token = localStorage.getItem('token');
+  //   if (!token) {
+  //     alert('Please login first');
+  //     return;
+  //   }
+    
+  //   try {
+  //     const response = await fetch(`http://localhost:5000/api/jobs/${id}/apply`, {
+  //       method: 'POST',
+  //       headers: { 
+  //         'Content-Type': 'application/json',
+  //         'Authorization': `Bearer ${token}` 
+  //       },
+  //       body: JSON.stringify({})
+  //     });
+      
+  //     if (!response.ok) {
+  //       throw new Error('Application failed');
+  //     }
+      
+  //     setAppliedJobs(prev => new Set([...prev, id]));
+  //     alert('Applied successfully!');
+  //   } catch (err) {
+  //     alert('Application failed');
+  //   }
+  // };
+const handleApply = async (id) => {
+  const token = localStorage.getItem('token');
+  if (!token) {
+    alert('Please login first');
+    return;
+  }
+  
+  try {
+    const response = await fetch(`http://localhost:5000/api/jobs/${id}/apply`, {
+      method: 'POST',
+      headers: { 
+        'Content-Type': 'application/json',
+        'Authorization': `Bearer ${token}` 
+      },
+      body: JSON.stringify({})
+    });
+    
+    if (!response.ok) {
+      throw new Error('Application failed');
     }
     
-    try {
-      const response = await fetch(`http://localhost:5000/api/jobs/${id}/apply`, {
-        method: 'POST',
-        headers: { 
-          'Content-Type': 'application/json',
-          'Authorization': `Bearer ${token}` 
-        },
-        body: JSON.stringify({})
-      });
-      
-      if (!response.ok) {
-        throw new Error('Application failed');
-      }
-      
-      setAppliedJobs(prev => new Set([...prev, id]));
-      alert('Applied successfully!');
-    } catch (err) {
-      alert('Application failed');
-    }
-  };
+    setAppliedJobs(prev => new Set([...prev, id]));
+    alert('✅ Successfully applied!');
+  } catch (err) {
+    alert('❌ Application failed');
+  }
+};
+
 
   const toggleFavorite = (id) => {
     setFavoriteJobs(prev => {
@@ -299,7 +282,7 @@ const JobList = () => {
               </p>
 
               {/* Action Buttons */}
-              <div className="flex gap-3">
+              {/* <div className="flex gap-3">
                 <button
                   onClick={() => handleApply(job._id)}
                   disabled={appliedJobs.has(job._id)}
@@ -325,7 +308,35 @@ const JobList = () => {
                 <button className="px-4 py-3 bg-white/10 text-white rounded-xl hover:bg-white/20 transition-all duration-300 hover:scale-105">
                   View
                 </button>
-              </div>
+              </div> */}
+              {/* Action Buttons */}
+<div className="flex gap-3">
+  <button
+    onClick={() => handleApply(job._id)}
+    disabled={appliedJobs.has(job._id)}
+    className={`flex-1 py-3 px-4 rounded-xl font-semibold transition-all duration-300 flex items-center justify-center gap-2 ${
+      appliedJobs.has(job._id)
+        ? 'bg-emerald-600 text-white cursor-not-allowed'
+        : 'bg-gradient-to-r from-blue-600 to-purple-600 text-white hover:from-blue-500 hover:to-purple-500 hover:scale-105 active:scale-95'
+    }`}
+  >
+    {appliedJobs.has(job._id) ? (
+      <>
+        <CheckCircle className="w-4 h-4" />
+        Applied
+      </>
+    ) : (
+      <>
+        📤 One-Click Apply
+      </>
+    )}
+  </button>
+
+  <button className="px-4 py-3 bg-white/10 text-white rounded-xl hover:bg-white/20 transition-all duration-300 hover:scale-105">
+    View
+  </button>
+</div>
+
 
               {/* Skill tags (if available) */}
               <div className="mt-4 flex flex-wrap gap-2">
