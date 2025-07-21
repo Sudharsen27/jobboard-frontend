@@ -131,7 +131,7 @@ function App() {
             />
 
             {/* Dashboard Route */}
-            <Route
+            {/* <Route
               path="/dashboard"
               element={
                 userRole === 'employer' ? (
@@ -140,7 +140,18 @@ function App() {
                   <CandidateDashboard />
                 )
               }
-            />
+            /> */}
+            <Route
+  path="/dashboard"
+  element={
+    userRole === 'employer' ? (
+      <EmployerDashboard />
+    ) : (
+      <CandidateDashboard />
+    )
+  }
+/>
+
 
             {/* Chat Room Route - hardcoded for now */}
             <Route
